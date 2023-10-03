@@ -15,6 +15,16 @@ import (
 )
 
 func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
+	var protocols []string
+	var iosProtocols []string
+	if id.ForceHttp11 {
+		protocols = []string{"http/1.1"}
+		iosProtocols = []string{"http/1.1"}
+	} else {
+		protocols = []string{"h2", "http/1.1"}
+		iosProtocols = []string{"h2", "h2-16", "h2-15", "h2-14", "spdy/3.1", "spdy/3", "http/1.1"}
+	}
+	id.ForceHttp11 = false // to come though 'case' correctly
 	switch id {
 	case HelloChrome_58, HelloChrome_62:
 		return ClientHelloSpec{
@@ -56,7 +66,7 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 				},
 				&StatusRequestExtension{},
 				&SCTExtension{},
-				&ALPNExtension{AlpnProtocols: []string{"h2", "http/1.1"}},
+				&ALPNExtension{AlpnProtocols: protocols},
 				&FakeChannelIDExtension{},
 				&SupportedPointsExtension{SupportedPoints: []byte{pointFormatUncompressed}},
 				&SupportedCurvesExtension{[]CurveID{CurveID(GREASE_PLACEHOLDER),
@@ -111,7 +121,7 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 				}},
 				&StatusRequestExtension{},
 				&SCTExtension{},
-				&ALPNExtension{AlpnProtocols: []string{"h2", "http/1.1"}},
+				&ALPNExtension{AlpnProtocols: protocols},
 				&FakeChannelIDExtension{},
 				&SupportedPointsExtension{SupportedPoints: []byte{
 					pointFormatUncompressed,
@@ -179,7 +189,7 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 					0x00, // pointFormatUncompressed
 				}},
 				&SessionTicketExtension{},
-				&ALPNExtension{AlpnProtocols: []string{"h2", "http/1.1"}},
+				&ALPNExtension{AlpnProtocols: protocols},
 				&StatusRequestExtension{},
 				&SignatureAlgorithmsExtension{SupportedSignatureAlgorithms: []SignatureScheme{
 					ECDSAWithP256AndSHA256,
@@ -252,7 +262,7 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 					0x00, // pointFormatUncompressed
 				}},
 				&SessionTicketExtension{},
-				&ALPNExtension{AlpnProtocols: []string{"h2", "http/1.1"}},
+				&ALPNExtension{AlpnProtocols: protocols},
 				&StatusRequestExtension{},
 				&SignatureAlgorithmsExtension{SupportedSignatureAlgorithms: []SignatureScheme{
 					ECDSAWithP256AndSHA256,
@@ -324,7 +334,7 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 					0x00, // pointFormatUncompressed
 				}},
 				&SessionTicketExtension{},
-				&ALPNExtension{AlpnProtocols: []string{"h2", "http/1.1"}},
+				&ALPNExtension{AlpnProtocols: protocols},
 				&StatusRequestExtension{},
 				&SignatureAlgorithmsExtension{SupportedSignatureAlgorithms: []SignatureScheme{
 					ECDSAWithP256AndSHA256,
@@ -386,7 +396,7 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 				&SupportedCurvesExtension{[]CurveID{X25519, CurveP256, CurveP384, CurveP521}},
 				&SupportedPointsExtension{SupportedPoints: []byte{pointFormatUncompressed}},
 				&SessionTicketExtension{},
-				&ALPNExtension{AlpnProtocols: []string{"h2", "http/1.1"}},
+				&ALPNExtension{AlpnProtocols: protocols},
 				&StatusRequestExtension{},
 				&SignatureAlgorithmsExtension{SupportedSignatureAlgorithms: []SignatureScheme{
 					ECDSAWithP256AndSHA256,
@@ -448,7 +458,7 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 					pointFormatUncompressed,
 				}},
 				&SessionTicketExtension{},
-				&ALPNExtension{AlpnProtocols: []string{"h2", "http/1.1"}},
+				&ALPNExtension{AlpnProtocols: protocols},
 				&StatusRequestExtension{},
 				&KeyShareExtension{[]KeyShare{
 					{Group: X25519},
@@ -523,7 +533,7 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 				&StatusRequestExtension{},
 				&NPNExtension{},
 				&SCTExtension{},
-				&ALPNExtension{AlpnProtocols: []string{"h2", "h2-16", "h2-15", "h2-14", "spdy/3.1", "spdy/3", "http/1.1"}},
+				&ALPNExtension{AlpnProtocols: iosProtocols},
 				&SupportedPointsExtension{SupportedPoints: []byte{
 					pointFormatUncompressed,
 				}},
@@ -585,7 +595,7 @@ func utlsIdToSpec(id ClientHelloID) (ClientHelloSpec, error) {
 				&StatusRequestExtension{},
 				&NPNExtension{},
 				&SCTExtension{},
-				&ALPNExtension{AlpnProtocols: []string{"h2", "h2-16", "h2-15", "h2-14", "spdy/3.1", "spdy/3", "http/1.1"}},
+				&ALPNExtension{AlpnProtocols: iosProtocols},
 				&SupportedPointsExtension{SupportedPoints: []byte{
 					pointFormatUncompressed,
 				}},
